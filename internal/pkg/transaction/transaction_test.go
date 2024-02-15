@@ -198,40 +198,40 @@ var cases = map[string]map[string][]*transaction.Transaction{
 }
 
 func TestTransactionFormat(t *testing.T) {
-	res := transaction.Format(cases["default"]["input"], transaction.Day)
+	res := transaction.Format(cases["default"]["input"], "day")
 	for i, trans := range res {
 		assert.Equal(t, cases["default"]["output"][i], trans)
 		// fmt.Println(trans.Timestamp)
 	}
 }
 func TestTransactionUnsorted(t *testing.T) {
-	res := transaction.Format(cases["unsorted"]["input"], transaction.Day)
+	res := transaction.Format(cases["unsorted"]["input"], "day")
 	for i, trans := range res {
 		assert.Equal(t, cases["default"]["output"][i], trans)
 	}
 }
 
 func TestTransactionEmpty(t *testing.T) {
-	res := transaction.Format(cases["empty"]["input"], transaction.Day)
+	res := transaction.Format(cases["empty"]["input"], "day")
 	assert.Nil(t, res)
 }
 
 func TestTransactionByHour(t *testing.T) {
-	res := transaction.Format(cases["byHour"]["input"], transaction.Hour)
+	res := transaction.Format(cases["byHour"]["input"], "hour")
 	for i, trans := range res {
 		assert.Equal(t, cases["byHour"]["output"][i], trans)
 	}
 }
 
 func TestTransactionByMonth(t *testing.T) {
-	res := transaction.Format(cases["byMonth"]["input"], transaction.Month)
+	res := transaction.Format(cases["byMonth"]["input"], "month")
 	for i, trans := range res {
 		assert.Equal(t, cases["byMonth"]["output"][i], trans)
 	}
 }
 
 func TestTransactionByYear(t *testing.T) {
-	res := transaction.Format(cases["byYear"]["input"], transaction.Year)
+	res := transaction.Format(cases["byYear"]["input"], "year")
 	for i, trans := range res {
 		assert.Equal(t, cases["byYear"]["output"][i], trans)
 	}

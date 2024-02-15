@@ -10,16 +10,25 @@ const (
 	Minute
 	Hour
 	Day
-	Week
 	Month
 	Year
 )
 
-var truncs = [7]time.Duration{time.Second, time.Minute, time.Hour}
+var (
+	truncs            = [3]time.Duration{time.Second, time.Minute, time.Hour}
+	intervalConverter = map[string]int{
+		"second": 0,
+		"minute": 1,
+		"hour":   2,
+		"day":    3,
+		"month":  4,
+		"year":   5,
+	}
+)
 
 type Transaction struct {
-	Value     int
-	Timestamp time.Time
+	Value     int       `json:"value"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
 func roundPeriod(period time.Time, interval int) time.Time {
@@ -37,7 +46,7 @@ func roundPeriod(period time.Time, interval int) time.Time {
 	}
 }
 
-func Format(transactions []*Transaction, interval int) []*Transaction {
+func Format(transactions []*Transaction, interval string) []*Transaction {
 	// In the example the values are sorted by timestamp
 	// but we can't be sure
 	if len(transactions) == 0 {
@@ -49,10 +58,10 @@ func Format(transactions []*Transaction, interval int) []*Transaction {
 	res := make([]*Transaction, 0, len(transactions))
 	res = append(res, &Transaction{
 		transactions[0].Value,
-		roundPeriod(transactions[0].Timestamp, interval),
+		roundPeriod(transactions[0].Timestamp, intervalConverter[interval]),
 	})
 	for _, trans := range transactions {
-		roundedTimestamp := roundPeriod(trans.Timestamp, interval)
+		roundedTimestamp := roundPeriod(trans.Timestamp, intervalConverter[interval])
 		if roundedTimestamp == res[len(res)-1].Timestamp {
 			continue
 		}
